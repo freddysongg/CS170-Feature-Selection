@@ -6,6 +6,7 @@ import re
 
 
 class DataLoader:
+    """Loads and validates data from a file"""
     def __init__(self):
         # Track loaded dataset information
         self.labels = None

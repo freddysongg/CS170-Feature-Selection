@@ -4,6 +4,7 @@ import sys
 
 
 class NearestNeighborClassifier:
+    """Base class for nearest neighbor classifier"""
     def __init__(self):
         # Store the training data
         self.train_features = None
