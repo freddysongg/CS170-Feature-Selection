@@ -3,7 +3,7 @@
     "algorithm": "BackwardSelector",
     "dataset_size": 500,
     "total_features": 6,
-    "runtime": 23.408254861831665,
+    "runtime": 24.31390881538391,
     "accuracy_history": [
         {
             "feature_count": 6,
@@ -24,6 +24,10 @@
         {
             "feature_count": 2,
             "accuracy": 0.978
+        },
+        {
+            "feature_count": 1,
+            "accuracy": 0.884
         }
     ],
     "best_accuracy": 0.978,
