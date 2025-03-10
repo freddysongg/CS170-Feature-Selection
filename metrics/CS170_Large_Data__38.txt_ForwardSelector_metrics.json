@@ -1,0 +1,19 @@
+{
+    "dataset_name": "CS170_Large_Data__38.txt",
+    "algorithm": "ForwardSelector",
+    "dataset_size": 1000,
+    "total_features": 40,
+    "runtime": 521.4016470909119,
+    "accuracy_history": [
+        {
+            "feature_count": 1,
+            "accuracy": 0.848
+        },
+        {
+            "feature_count": 2,
+            "accuracy": 0.96
+        }
+    ],
+    "best_accuracy": 0.96,
+    "best_feature_count": 2
+}
