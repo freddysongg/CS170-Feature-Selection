@@ -16,6 +16,7 @@ class FeatureSelector:
         self.best_accuracy = 0.0
         self.accuracy_history = []
         self.metrics_collector = MetricsCollector()
+        self.individual_feature_accuracies = {}
 
     def _print_feature_set(
         self, features: List[int], accuracy: float, is_best: bool = False
@@ -37,6 +38,15 @@ class FeatureSelector:
             for features, acc in self.accuracy_history
         ]
 
+        # Convert weak features to list of tuples
+        weak_features = []
+        for feature, accuracy in self.individual_feature_accuracies.items():
+            if (
+                accuracy > 0.7 * self.best_accuracy
+                and feature not in self.best_features
+            ):
+                weak_features.append((feature, accuracy))
+
         metrics = SelectionMetrics(
             dataset_name=dataset_name,
             algorithm_name=self.__class__.__name__,
@@ -46,9 +56,39 @@ class FeatureSelector:
             accuracy_history=accuracy_history,
             best_accuracy=self.best_accuracy,
             best_feature_count=len(self.best_features),
+            individual_feature_accuracies=self.individual_feature_accuracies,
+            weak_features=weak_features,
         )
 
         self.metrics_collector.save_metrics(metrics)
+
+    def _analyze_weak_features(self, features: np.ndarray, labels: np.ndarray):
+        """Identify features that perform well individually but get overshadowed in combinations"""
+        print("\nIndividual feature performance:")
+
+        # Get individual feature accuracies
+        for feature in range(features.shape[1]):
+            accuracy = self.classifier.evaluate(features, labels, [feature])
+            self.individual_feature_accuracies[feature] = accuracy
+            print(f"Feature {feature + 1} individual accuracy: {accuracy * 100:.1f}%")
+
+        # Identify weak features
+        weak_features = []
+        for feature, accuracy in self.individual_feature_accuracies.items():
+            if (
+                accuracy > 0.7 * self.best_accuracy
+                and feature not in self.best_features
+            ):
+                weak_features.append((feature, accuracy))
+
+        if weak_features:
+            print("\nWeak features:")
+            for feature, accuracy in sorted(
+                weak_features, key=lambda x: x[1], reverse=True
+            ):
+                print(
+                    f"Feature {feature + 1}: {accuracy * 100:.1f}% accuracy individually"
+                )
 
 
 class ForwardSelector(FeatureSelector):
@@ -128,6 +168,8 @@ class ForwardSelector(FeatureSelector):
             f"which has an accuracy of {self.best_accuracy * 100:.1f}%"
         )
 
+        # Analyze weak features
+        self._analyze_weak_features(features, labels)
         return self.best_features, self.best_accuracy, self.accuracy_history
 
 
@@ -199,6 +241,7 @@ class BackwardSelector(FeatureSelector):
             f"which has an accuracy of {self.best_accuracy * 100:.1f}%"
         )
 
+        self._analyze_weak_features(features, labels)
         return self.best_features, self.best_accuracy, self.accuracy_history
 
 

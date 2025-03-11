@@ -1,7 +1,7 @@
 # Feature Selection with Nearest Neighbor
 
 ## Project Overview
-This project implements feature selection algorithms using the nearest neighbor classifier. The implementation includes both Forward Selection and Backward Elimination approaches to find the optimal feature subset for classification, along with performance metrics tracking and visualization capabilities.
+This project implements feature selection algorithms using the nearest neighbor classifier. The implementation includes both Forward Selection and Backward Elimination approaches, with performance tracking, weak feature analysis, and visualization of results.
 
 ## Project Structure
 ```
@@ -15,13 +15,12 @@ CS170-Feature-Selection/
 ├── plots/                     # Generated visualization plots
 │   ├── accuracy_vs_features/
 │   └── runtime_comparison.png
-├── src/                       # Source code
-│   ├── data_loader.py        # Data loading and validation
-│   ├── classifier.py         # Nearest Neighbor implementation
-│   ├── feature_selection.py  # Feature selection algorithms
-│   ├── metrics_collector.py  # Performance tracking
-│   └── visualize_results.py  # Results visualization
-└── README.md                 # Project documentation
+├── src/                      
+    ├── data_loader.py        # Data loading and validation
+    ├── classifier.py         # Nearest Neighbor implementation
+    ├── feature_selection.py  # Feature selection algorithms
+    ├── metrics_collector.py  # Performance tracking
+    └── visualize_results.py  # Results visualization
 ```
 
 ## Implementation Details
@@ -33,31 +32,30 @@ CS170-Feature-Selection/
 - Performs basic data validation and statistics
 
 ### 2. Nearest Neighbor Classifier (`classifier.py`)
-- Implements 1-NN classification
-- Uses Euclidean distance metric
+- Implements 1-NN classification using Euclidean distance
 - Supports feature subset evaluation
 - Includes leave-one-out cross-validation
 
 ### 3. Feature Selection (`feature_selection.py`)
-- Base FeatureSelector class for common functionality
+- Base FeatureSelector class with shared functionality
 - Forward Selection implementation
 - Backward Elimination implementation
-- Progress tracking and result reporting
-- Interactive algorithm selection
+- Weak feature analysis
 
 ### 4. Performance Metrics (`metrics_collector.py`)
-- Tracks accuracy history
-- Measures runtime performance
-- Records dataset statistics
-- Stores metrics in JSON format
+- Tracks comprehensive metrics including:
+  - Accuracy history for each feature set
+  - Runtime performance
+  - Dataset statistics
+  - Individual feature performance
+  - Weak feature identification
 
 ### 5. Visualization (`visualize_results.py`)
 - Generates accuracy vs. feature count plots
 - Creates runtime comparison charts
-- Supports multiple dataset visualization
-- Automated plot generation
+- Visualizes weak feature analysis
 
-## Algorithms
+## Feature Selection Algorithms
 
 ### Forward Selection
 1. Starts with empty feature set
@@ -70,6 +68,11 @@ CS170-Feature-Selection/
 2. Iteratively removes features
 3. Evaluates remaining feature sets
 4. Records performance metrics
+5. Analyzes overshadowed features
+
+### Weak Feature Analysis
+- Identifies features that perform well individually but get overshadowed
+- Calculates individual feature performance
 
 ## Usage
 
@@ -89,34 +92,41 @@ python src/visualize_results.py
 ```
 
 ## Output Format
-The program provides detailed output and generates:
 
 1. Console Output:
 ```
 This dataset has X features (not including the class attribute), with Y instances.
-Running nearest neighbor with all X features, using "leaving-one-out" evaluation, I get an accuracy of Z%
+Running nearest neighbor with all X features, using "leave-one-out" evaluation...
 Beginning search.
 Using feature(s) {1} accuracy is A%
 ...
+Analyzing individual feature performance:
+Feature 1 individual accuracy: X%
+...
+Weak features:
+Feature N: X% accuracy individually
 ```
 
 2. Performance Metrics (JSON):
 ```json
 {
-    "dataset_name": "CS170_Small_Data__112.txt",
+    "dataset_name": "example_dataset.txt",
     "algorithm": "ForwardSelector",
     "dataset_size": 500,
     "total_features": 6,
     "runtime": 19.13,
     "accuracy_history": [...],
     "best_accuracy": 0.978,
-    "best_feature_count": 2
+    "best_feature_count": 2,
+    "individual_feature_accuracies": {...},
+    "weak_features": [...]
 }
 ```
 
 3. Visualization Plots:
-- Accuracy vs. Feature Count graphs
+- Accuracy progression graphs
 - Runtime comparison charts
+- Feature performance analysis
 
 ## Implementation Notes
 
@@ -125,21 +135,18 @@ Using feature(s) {1} accuracy is A%
    - Space-separated values
    - First column: class labels (1 or 2)
    - Remaining columns: continuous features
-   - No missing values allowed
    - Maximum 64 features
    - Maximum 2,048 instances
 
 2. Performance Tracking:
    - Automated metrics collection
-   - JSON-based storage
    - Runtime measurement
-   - Accuracy history logging
+   - Weak feature identification
 
-3. Visualization Features:
-   - Automated plot generation
-   - Multiple dataset support
-   - Performance comparisons
-   - Clear metric presentation
+3. Analysis Features:
+   - Individual feature performance
+   - Feature interaction analysis
+   - Performance visualization
 
 ## Testing
 
@@ -159,7 +166,7 @@ python src/visualize_results.py
 ```
 
 ## Author
-[Your Name]
+Freddy Song
 
 ## License
 MIT License
