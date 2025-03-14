@@ -35,15 +35,27 @@ def plot_accuracy_vs_features(metrics, output_dir="plots"):
         accuracies = []
         for entry in metric["accuracy_history"]:
             if isinstance(entry, dict):  # New format
-                feature_counts.append(entry["feature_count"])
-                accuracies.append(entry["accuracy"])
+                feature_count = entry["feature_count"]
+                # Skip the empty feature set (0 features)
+                if feature_count > 0:
+                    feature_counts.append(feature_count)
+                    accuracies.append(entry["accuracy"])
             else:  # Old format
-                feature_counts.append(len(entry[0]))
-                accuracies.append(entry[1])
+                feature_count = len(entry[0])
+                # Skip the empty feature set (0 features)
+                if feature_count > 0:
+                    feature_counts.append(feature_count)
+                    accuracies.append(entry[1])
 
         plt.plot(feature_counts, accuracies, marker="o", label="Feature Selection Path")
+
+        # Get algorithm name (handle both keys)
+        algorithm_name = metric.get(
+            "algorithm", metric.get("algorithm_name", "Unknown")
+        )
+
         plt.title(
-            f'Accuracy vs Feature Count\n{metric["dataset_name"]} - {metric["algorithm"]}'
+            f'Accuracy vs Feature Count\n{metric["dataset_name"]} - {algorithm_name}'
         )
         plt.xlabel("Number of Features")
         plt.ylabel("Accuracy (%)")
@@ -52,7 +64,7 @@ def plot_accuracy_vs_features(metrics, output_dir="plots"):
         plt.savefig(
             os.path.join(
                 output_dir,
-                f'{metric["dataset_name"]}_{metric["algorithm"]}_accuracy.png',
+                f'{metric["dataset_name"]}_{algorithm_name}_accuracy.png',
             )
         )
         plt.close()
@@ -92,10 +104,12 @@ def plot_feature_comparison(metrics, output_dir="plots"):
         if "accuracy_history" in metric:
             for entry in metric["accuracy_history"]:
                 if isinstance(entry, dict):  # New format
-                    feature_count = entry["feature_count"]
+                    # Adjust feature count to start from 1
+                    feature_count = max(1, entry["feature_count"])
                     accuracy = entry["accuracy"]
                 else:  # Old format (list of features and accuracy)
-                    feature_count = len(entry[0])
+                    # Adjust feature count to start from 1
+                    feature_count = max(1, len(entry[0]))
                     accuracy = entry[1]
 
                 features_data["Feature"].append(f"F{feature_count}")
@@ -105,7 +119,8 @@ def plot_feature_comparison(metrics, output_dir="plots"):
         # Add weak features if available
         if "weak_features" in metric:
             for feature, accuracy in metric["weak_features"]:
-                features_data["Feature"].append(f"F{feature+1}")
+                # Adjust feature index to start from 1
+                features_data["Feature"].append(f"F{feature + 1}")
                 features_data["Accuracy"].append(accuracy * 100)
                 features_data["Category"].append("Weak Features")
 
@@ -127,9 +142,12 @@ def plot_feature_comparison(metrics, output_dir="plots"):
             palette=["blue", "orange"],
         )
 
-        plt.title(
-            f'Feature Comparison\n{metric["dataset_name"]} - {metric["algorithm"]}'
+        # Get algorithm name (handle both keys)
+        algorithm_name = metric.get(
+            "algorithm", metric.get("algorithm_name", "Unknown")
         )
+
+        plt.title(f'Feature Comparison\n{metric["dataset_name"]} - {algorithm_name}')
         plt.xlabel("Features")
         plt.ylabel("Accuracy (%)")
 
@@ -149,7 +167,7 @@ def plot_feature_comparison(metrics, output_dir="plots"):
         plt.savefig(
             os.path.join(
                 output_dir,
-                f'{metric["dataset_name"]}_{metric["algorithm"]}_feature_comparison.png',
+                f'{metric["dataset_name"]}_{algorithm_name}_feature_comparison.png',
             )
         )
         plt.close()
