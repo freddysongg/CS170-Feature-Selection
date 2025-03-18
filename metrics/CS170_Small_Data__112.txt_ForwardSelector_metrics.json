@@ -3,7 +3,7 @@
     "algorithm": "ForwardSelector",
     "dataset_size": 500,
     "total_features": 6,
-    "runtime": 32.176323890686035,
+    "runtime": 27.435662984848022,
     "accuracy_history": [
         {
             "feature_count": 0,
@@ -36,6 +36,10 @@
     ],
     "best_accuracy": 0.978,
     "best_feature_count": 2,
+    "best_features": [
+        3,
+        5
+    ],
     "individual_feature_accuracies": {
         "0": 0.678,
         "1": 0.652,

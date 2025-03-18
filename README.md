@@ -34,7 +34,7 @@ CS170-Feature-Selection/
 ### 2. Nearest Neighbor Classifier (`classifier.py`)
 - Implements 1-NN classification using Euclidean distance
 - Supports feature subset evaluation
-- Includes leave-one-out cross-validation
+- Includes leave-one-out cross-validation (LOOCV)
 
 ### 3. Feature Selection (`feature_selection.py`)
 - Base FeatureSelector class with shared functionality
@@ -48,6 +48,7 @@ CS170-Feature-Selection/
   - Runtime performance
   - Dataset statistics
   - Individual feature performance
+  - Feature subset performance
   - Weak feature identification
 
 ### 5. Visualization (`visualize_results.py`)
@@ -118,6 +119,7 @@ Feature N: X% accuracy individually
     "accuracy_history": [...],
     "best_accuracy": 0.978,
     "best_feature_count": 2,
+    "best_features": [1, 3],
     "individual_feature_accuracies": {...},
     "weak_features": [...]
 }

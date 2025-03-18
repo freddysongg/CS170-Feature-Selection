@@ -14,6 +14,7 @@ class SelectionMetrics:
     accuracy_history: List[Dict[str, float]]
     best_accuracy: float
     best_feature_count: int
+    best_features: List[int]
     individual_feature_accuracies: Dict[int, float]
     weak_features: List[Tuple[int, float]]
 
@@ -38,6 +39,7 @@ class MetricsCollector:
             "accuracy_history": metrics.accuracy_history,
             "best_accuracy": metrics.best_accuracy,
             "best_feature_count": metrics.best_feature_count,
+            "best_features": metrics.best_features,
             "individual_feature_accuracies": metrics.individual_feature_accuracies,
             "weak_features": metrics.weak_features,
         }

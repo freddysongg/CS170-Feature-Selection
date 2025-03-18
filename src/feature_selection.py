@@ -56,6 +56,7 @@ class FeatureSelector:
             accuracy_history=accuracy_history,
             best_accuracy=self.best_accuracy,
             best_feature_count=len(self.best_features),
+            best_features=self.best_features,
             individual_feature_accuracies=self.individual_feature_accuracies,
             weak_features=weak_features,
         )
@@ -269,7 +270,7 @@ def process_dataset(filename: str, selector: FeatureSelector):
 
 
 def main():
-    datasets = ["CS170_Small_Data__112.txt", "CS170_Large_Data__38.txt"]
+    datasets = ["CS170_Large_Data__12.txt", "CS170_Large_Data__17.txt"]
 
     print("\nWelcome to Feature Selection Algorithm")
     print("1. Forward Selection")
